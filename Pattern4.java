@@ -7,7 +7,7 @@ public class Main {
         
         int n = scn.nextInt();
         int space = 0;
-        int star = 5;
+        int star = n;
         for(int i = 1; i<=n; i++){
             for (int j=1; j<=space; j++){
                 System.out.print("\t");
