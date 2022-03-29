@@ -1,0 +1,113 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+  public static class Node {
+    int data;
+    Node left;
+    Node right;
+
+    Node(int data, Node left, Node right) {
+      this.data = data;
+      this.left = left;
+      this.right = right;
+    }
+  }
+
+  public static Node construct(int[] arr, int lo, int hi) {
+    if(lo > hi){
+      return null;
+    }
+
+    int mid = (lo + hi) / 2;
+    int data = arr[mid];
+
+    Node lc = construct(arr, lo, mid - 1);
+    Node rc = construct(arr, mid + 1, hi); 
+
+    Node node = new Node(data, lc, rc);
+
+    return node;
+  }
+
+  public static void display(Node node) {
+    if (node == null) {
+      return;
+    }
+
+    String str = "";
+    str += node.left == null ? "." : node.left.data + "";
+    str += " <- " + node.data + " -> ";
+    str += node.right == null ? "." : node.right.data + "";
+    System.out.println(str);
+
+    display(node.left);
+    display(node.right);
+  }
+
+  public static int size(Node node) {
+    if(node == null){
+      return 0;
+    }
+    int lc = size(node.left);
+    int rc = size(node.right);
+
+    int s = lc + rc + 1;
+    return s;
+  }
+
+  public static void printInRange(Node node,int d1, int d2) {
+    if(node == null){
+      return;
+    }
+    if(d1 < node.data && d2 < node.data){
+      printInRange(node.left, d1, d2);
+    } else if (d1 > node.data && d2 > node.data){
+      printInRange(node.right, d1, d2);
+    } else {
+      printInRange(node.left, d1, d2);
+      System.out.println(node.data);
+      printInRange(node.right, d1, d2);
+    }
+  }
+  
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int n = Integer.parseInt(br.readLine());
+    Integer[] arr = new Integer[n];
+    String[] values = br.readLine().split(" ");
+    for (int i = 0; i < n; i++) {
+      if (values[i].equals("n") == false) {
+        arr[i] = Integer.parseInt(values[i]);
+      } else {
+        arr[i] = null;
+      }
+    }
+
+    int d1 = Integer.parseInt(br.readLine());
+    int d2 = Integer.parseInt(br.readLine());
+
+    ArrayList<Integer> list = new ArrayList<Integer>();
+    for(int i = 0; i < arr.length; i++){
+      if(arr[i] != null){
+        list.add(arr[i]);
+      }
+    }
+
+    int[] arr1 = new int[list.size()];
+    int i = 0;
+    for(int val : list){
+      arr1[i] = val; 
+      i++;
+    }
+
+    Arrays.sort(arr1);
+
+    Node root = construct(arr1, 0, arr1.length - 1);
+    // display(root);
+
+    printInRange(root, d1, d2);
+    
+  }
+
+}
